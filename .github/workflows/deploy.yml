@@ -1,0 +1,25 @@
+name: Production CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main,feature/* ]
+
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Validate
+        run: |
+          cd terraform/vpc && terraform init -backend=false && terraform validate
+          cd ../iam && terraform init -backend=false && terraform validate
+          cd ../eks && terraform init -backend=false && terraform validate
+
+      - name: Build Docker Artifact
+        run: |
+          docker build -t production-app:${{ github.sha }} .

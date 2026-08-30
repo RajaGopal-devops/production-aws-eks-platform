@@ -35,7 +35,6 @@ jobs:
           context: .
           push: true
           tags: |
-            production-app:${{ github.sha }}
             rajagopaldevops/prodution-app:${{ github.sha }}
             rajagopaldevops/production-app:latest
                     

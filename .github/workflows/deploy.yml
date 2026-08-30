@@ -20,7 +20,7 @@ jobs:
           cd ../iam && terraform init -backend=false && terraform validate
           cd ../eks && terraform init -backend=false && terraform validate
       - name: SonarQube Scan
-        uses: SonarSource/sonarcloud-githubaction@master
+        uses: SonarSource/sonarcloud-github-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       

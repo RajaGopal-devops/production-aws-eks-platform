@@ -19,7 +19,11 @@ jobs:
           cd terraform/vpc && terraform init -backend=false && terraform validate
           cd ../iam && terraform init -backend=false && terraform validate
           cd ../eks && terraform init -backend=false && terraform validate
-
+      - name: SonarQube Scan
+        uses: SonarSource/sonarcloud-githubaction@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      
       - name: Build Docker Artifact
         run: |
           docker build -t production-app:${{ github.sha }} .

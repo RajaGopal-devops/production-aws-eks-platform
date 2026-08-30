@@ -32,7 +32,7 @@ jobs:
       - name: bUILD AND PUSH dOCKER image
         uses: docker/build-push-action@v5
         with:
-          context:
+          context: .
           push: true
           tags: |
             production-app:${{ github.sha }}

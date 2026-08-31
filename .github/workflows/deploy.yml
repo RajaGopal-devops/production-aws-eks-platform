@@ -26,6 +26,7 @@ jobs:
           with:
            args: >
             -Dsonar.projectKey=RajaGopal-devops_Production-aws-eks-platform
+            -Dsonar.organization=rajagopal.devops
       
       - name: Build Docker Artifact
         run: |

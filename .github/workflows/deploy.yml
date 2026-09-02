@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@a7589255a29792085750d75f10b2df2328df9fb0
+        uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Validate
         run: |
@@ -36,7 +36,7 @@ jobs:
           docker build -t production-app:${{ github.sha }} .
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@9780b0c442fcf1117581c025da735aa291244943
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}

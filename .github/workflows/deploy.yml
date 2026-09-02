@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@b9cd54a37346d564f50084f7bba553c9e7b23f5d
+        uses: hashicorp/setup-terraform@a7589255a29792085750d75f10b2df2328df9fb0
 
       - name: Terraform Validate
         run: |
@@ -42,7 +42,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       
       - name: BUILD AND PUSH Docker image
-        uses: docker/build-push-action@6a1326a0f4431fc6adef939a3f55097495393273
+        uses: docker/build-push-action@ca5286e6c4779e930113008609b5331451e04dbd
         with:
           context: .
           push: true

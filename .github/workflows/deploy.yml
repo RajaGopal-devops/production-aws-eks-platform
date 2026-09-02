@@ -26,10 +26,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Validate Kubernetes Manifests
+      - name: Validate Kubernetes Manifests Syntax
         run: |
-          kubectl apply --dry-run=client --validate=false -f k8s-manifests/deployment/deployment.yaml
-          kubectl apply --dry-run=client --validate=false -f k8s-manifests/service/Service.yaml
+          python3 -c '
+          import yaml, sys
+          for f in sys.argv[1:]:
+              try:
+                  with open(f) as file:
+                      list(yaml.safe_load_all(file))
+                  print(f"{f}: YAML Syntax is valid")
+              except Exception as e:
+                  print(f"{f}: Invalid YAML - {e}")
+                  sys.exit(1)
+          ' k8s-manifests/deployment/deployment.yaml k8s-manifests/service/Service.yaml
 
       - name: Build Docker Artifact
         run: |

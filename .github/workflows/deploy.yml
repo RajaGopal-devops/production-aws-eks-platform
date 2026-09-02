@@ -20,14 +20,15 @@ jobs:
           cd ../iam && terraform init -backend=false && terraform validate
           cd ../eks && terraform init -backend=false && terraform validate
       - name: SonarQube Scan
-        uses: SonarSource/sonarcloud-github-action@7v2
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Validate Kubernetes Manifests
         run: |
-        kubectl apply --dry-run=client -f k8s-manifests/deployment/deployment.yaml
-        kubectl apply --dry-run=client -f k8s-manifests/service/Service.yaml
+          kubectl apply --dry-run=client -f k8s-manifests/deployment/deployment.yaml
+          kubectl apply --dry-run=client -f k8s-manifests/service/Service.yaml
       - name: Build Docker Artifact
         run: |
           docker build -t production-app:${{ github.sha }} .
@@ -43,7 +44,7 @@ jobs:
           context: .
           push: true
           tags: |
-            rajagopaldevops/prodution-app:${{ github.sha }}
+            rajagopaldevops/production-app:${{ github.sha }}
             rajagopaldevops/production-app:latest
                     
           

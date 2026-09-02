@@ -12,14 +12,23 @@ spec:
       labels:
         app: my-app
     spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
       containers:
       - name: my-app-container
         image: nginx:latest
         ports:
         - containerPort: 80
+        resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
         securityContext:
           allowPrivilegeEscalation: false
-          runAsNonRoot: true
           capabilities:
            drop:
-            All
+            - All

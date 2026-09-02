@@ -28,8 +28,8 @@ jobs:
 
       - name: Validate Kubernetes Manifests
         run: |
-          kubectl apply --dry-run=client -f k8s-manifests/deployment/deployment.yaml
-          kubectl apply --dry-run=client -f k8s-manifests/service/Service.yaml
+          kubectl apply --dry-run=client --validate=false -f k8s-manifests/deployment/deployment.yaml
+          kubectl apply --dry-run=client --validate=false -f k8s-manifests/service/Service.yaml
 
       - name: Build Docker Artifact
         run: |

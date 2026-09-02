@@ -21,7 +21,7 @@ jobs:
           cd ../eks && terraform init -backend=false && terraform validate
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarcloud-github-action@d527181cbe16c31f82f2560e4fbc11bcff5779c1
+        uses: SonarSource/sonarcloud-github-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -42,7 +42,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       
       - name: BUILD AND PUSH Docker image
-        uses: docker/build-push-action@ca5286e6c4779e930113008609b5331451e04dbd
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true

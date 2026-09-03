@@ -30,7 +30,7 @@ jobs:
 
       - name: Validate Kubernetes Manifests Syntax
         run: |
-          pip3 install pyyaml
+          pip3 install --only-binary :all: pyyaml==6.0.2
           python3 -c '
           import yaml, sys
           for f in sys.argv[1:]:

@@ -2,44 +2,58 @@ name: Production CI/CD Pipeline
 
 on:
   push:
-    branches: [ main,feature/* ]
+    branches: [ main, feature/* ]
 
 jobs:
   build-and-validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
 
       - name: Terraform Validate
         run: |
           cd terraform/vpc && terraform init -backend=false && terraform validate
           cd ../iam && terraform init -backend=false && terraform validate
           cd ../eks && terraform init -backend=false && terraform validate
+
       - name: SonarQube Scan
-        uses: SonarSource/sonarcloud-github-action@7v2
+        uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-             
-      - name: Build Docker Artifact
+
+      - name: Validate Kubernetes Manifests Syntax
         run: |
-          docker build -t production-app:${{ github.sha }} .
+          pip3 install --only-binary :all: pyyaml==6.0.2
+          python3 -c '
+          import yaml, sys
+          for f in sys.argv[1:]:
+              try:
+                  with open(f) as file:
+                      list(yaml.safe_load_all(file))
+                  print(f"{f}: YAML Syntax is valid")
+              except Exception as e:
+                  print(f"{f}: Invalid YAML - {e}")
+                  sys.exit(1)
+          ' k8s-manifests/deployment/deployment.yaml k8s-manifests/service/Service.yaml
+
       - name: Log in to Docker Hub
-        uses: docker/login-action@v3
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
         with:
-         username: ${{ secrets.DOCKER_USERNAME }}
-         password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      - name: bUILD AND PUSH dOCKER image
-        uses: docker/build-push-action@v5
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: BUILD AND PUSH Docker image
+        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5
         with:
           context: .
           push: true
           tags: |
-            rajagopaldevops/prodution-app:${{ github.sha }}
+            rajagopaldevops/production-app:${{ github.sha }}
             rajagopaldevops/production-app:latest
-                    
-          

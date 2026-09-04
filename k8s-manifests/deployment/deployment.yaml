@@ -17,7 +17,7 @@ spec:
         runAsNonRoot: true
       containers:
       - name: production-app
-        image: nginx:latestrajagopaldevops/production-app:latest
+        image: rajagopaldevops/production-app:latest
         ports:
         - containerPort: 80
         resources:

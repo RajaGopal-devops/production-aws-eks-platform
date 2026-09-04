@@ -16,8 +16,8 @@ spec:
       securityContext:
         runAsNonRoot: true
       containers:
-      - name: my-app-container
-        image: nginx:latest
+      - name: production-app
+        image: nginx:latestrajagopaldevops/production-app:latest
         ports:
         - containerPort: 80
         resources:

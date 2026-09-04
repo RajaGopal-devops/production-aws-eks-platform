@@ -49,3 +49,11 @@ jobs:
           context: .
           push: false
           tags: production-app:${{ github.sha }}
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@28.0.0
+        with:
+          image-ref: 'production-app:${{ github.sha }}'
+          format: 'table'
+          exit-code: '0'
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'

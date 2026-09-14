@@ -14,7 +14,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       securityContext:
-        runAsNonRoot: true
+        runAsNonRoot: false
       containers:
       - name: production-app
         image: rajagopaldevops/production-app:latest
@@ -31,6 +31,4 @@ spec:
               ephemeral-storage: "200Mi"
         securityContext:
           allowPrivilegeEscalation: false
-          capabilities:
-           drop:
-            - All
+          

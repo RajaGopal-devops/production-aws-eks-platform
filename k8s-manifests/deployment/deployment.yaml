@@ -14,10 +14,11 @@ spec:
     spec:
       automountServiceAccountToken: false
       securityContext:
-        runAsNonRoot: true
+        runAsNonRoot: false
       containers:
       - name: production-app
-        image: rajagopaldevops/production-app:latest
+        image: rajagopaldevops/production-app:20260914-1
+        imagePullPolicy: Never
         ports:
         - containerPort: 80
         resources:
@@ -34,3 +35,7 @@ spec:
           capabilities:
            drop:
             - All
+           add:
+            - CHOWN
+            - SETGID
+            - SETUID
